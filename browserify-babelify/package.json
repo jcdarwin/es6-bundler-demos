@@ -3,12 +3,24 @@
   "version": "1.0.0",
   "description": "An example of ES6 module bundling using browserify and babelify",
   "main": "index.js",
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "react": "global:React",
+    "react-dom": "global:ReactDOM"
+  },
   "scripts": {
     "clean": "rm -rf build && mkdir -p build/js",
     "copy": "cp src/index.html build",
-    "prebuild": "npm run clean && npm run copy",
-    "build": "browserify src/js/app.js -o build/js/bundle.js -t [ babelify --presets [ es2015 react ] ]",
-    "postbuild": "open http://localhost:9000/build/ && http-server -p 9000"
+    "predev": "npm run clean && npm run copy",
+    "dev": "browserify -t [ babelify --presets [ es2015 react ] ] src/js/app.js -o build/js/bundle.js",
+    "postdev": "open http://localhost:9000/build/ && http-server -p 9000",
+    "preprod": "npm run clean && npm run copy",
+    "prod": "NODE_ENV=production browserify -t [ babelify --presets [ es2015 react ] ] -g uglifyify src/js/app.js -o build/js/bundle.js",
+    "postprod": "open http://localhost:9000/build/ && http-server -p 9000"
   },
   "author": "Jason Darwin",
   "license": "ISC",
@@ -19,7 +31,9 @@
     "babel-preset-react": "^6.5.0",
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
-    "http-server": "^0.8.5"
+    "browserify-shim": "^3.8.12",
+    "http-server": "^0.8.5",
+    "uglifyify": "^3.0.1"
   },
   "dependencies": {
     "react": "^0.14.7",
