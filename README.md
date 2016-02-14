@@ -66,7 +66,7 @@ and the [uglifyify transform](https://www.npmjs.com/package/uglifyify)
 We use the [browserify-shim](https://github.com/thlorenz/browserify-shim) to ensure that we don't include our dependencies in our application bundle.
 
 Using the [uglifyify transform](https://www.npmjs.com/package/uglifyify) means we get the chance to minify third-party
-code as well as our own custom code
+code as well as our own custom code.
 
 ### Installation
 
@@ -76,10 +76,13 @@ code as well as our own custom code
 
 ### Building
 
-Running the following will build the application, and open a browser tab at http://localhost:9000/build/ showing
-the results
+Running one of the following will build the application, and open a browser tab at [http://localhost:9000/build/](http://localhost:9000/build/) showing the results:
 
+	// Produce uglified code
 	npm run prod
+
+	// Produce unuglified code, so we can see how `bundle.js` is constructed internally
+	npm run dev
 
 Our actual build command, using the npm scripts block, is relatively straight-forward:
 
@@ -87,7 +90,7 @@ Our actual build command, using the npm scripts block, is relatively straight-fo
 
 ### Conclusion
 
-We get a `bundle.js` size of 3.2KB, and this approach requires relatively minimal configuration: apart form the build command, we make use of the [browserify-shim](https://github.com/thlorenz/browserify-shim) in `package.json` to exclude React from our `bundle.js`:
+We get a `bundle.js` size of 3.2KB, and this approach requires relatively minimal configuration: apart from the build command, we make use of the [browserify-shim](https://github.com/thlorenz/browserify-shim) in `package.json` to exclude React from our `bundle.js`:
 
     "browserify": {
       "transform": [
@@ -109,7 +112,7 @@ and make use of tools such as Babel and Rollup.
 
 With the move to Babel 6, we've based our example on the [jspm-react-component-demo](https://github.com/guybedford/jspm-react-component-demo.git).
 
-This demo demonstrates some of the major features of using JSPM to bundle React components, and is detailed fully with [these notes](http://jspm.io/0.17-beta-guide/index.html).
+This demo demonstrates some of the major features of using JSPM to bundle React components, and is detailed fully by [the jspm 0.17 beta guide](http://jspm.io/0.17-beta-guide/index.html).
 
 ### Installation
 
@@ -121,10 +124,13 @@ This demo demonstrates some of the major features of using JSPM to bundle React 
 
 ### Building
 
-Running the following will build the application, and open a browser tab at http://localhost:9000/build/ showing
-the results
+Running one of the following will build the application, and open a browser tab at [http://localhost:9000/build/](http://localhost:9000/build/) showing the results:
 
+	// Produce uglified code
 	npm run prod
+
+	// Produce unuglified code, so we can see how `bundle.js` is constructed internally
+	npm run dev
 
 Our actual build command, using the npm scripts block, is relatively straight-forward:
 
@@ -179,14 +185,13 @@ The [webpack-howto](https://github.com/petehunt/webpack-howto) is a good intro t
 
 ### Building
 
-Running the following will build the application, and open a browser tab showing
-the results
+Running one of the following will build the application, and open a browser tab at [http://localhost:9000/build/](http://localhost:9000/build/) showing the results:
 
-	#dev build uses the full React, and is not uglified, for a `vendor.bundle.js` size of circa 678kb.
-	npm run dev
-
-	#prod build uses the optimised React build, and is uglified, for a `vendor.bundle.js` size of circa 190kb.
+	// Produce uglified code
 	npm run prod
+
+	// Produce unuglified code, so we can see how `bundle.js` is constructed internally
+	npm run dev
 
 Our actual build command, using the npm scripts block, is the simplest yet:
 
