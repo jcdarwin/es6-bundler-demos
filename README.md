@@ -10,6 +10,8 @@ such as WebPack, Gulp, Grunt etc.
 For our examples, we compile a very simple React application that loads another
 file (`Hello.js`) as an ES6 module.
 
+## Goals
+
 We are trying to accomplish the following, in order to make this a realistic appraisal:
 
 * use JSX in our custom React components, meaning the build system needs to be able to compile
@@ -29,8 +31,34 @@ to be served to be compiled into a `build` folder.
 
 All techniques listed below work with [Babel 6](http://jamesknelson.com/the-six-things-you-need-to-know-about-babel-6/): Babel 6 introduced a new plugin architecture which is great, but also broke the previous API. Coupled with this, the `browser.js` file was deprecated, meaning that we need to find another way to load ES6 modules in our browser.
 
+## Approaches
 
-## browserify-babelify
+The three approaches we'll be considering here are:
+
+1. browserify-babelify: browserify with the babelify and uglifyify transforms
+
+2. jspm-systemjs-babel: jspm, systemJS and the es6-module-loader, making use of Babel and Rollup
+
+3. webpack-babel: webpack with the babel-loader and uglifyJS plugin.
+
+## Overall conclusion
+
+browserify-babelify is easy to setup, and jspm-systemjs-babel may have plenty of configuration options,
+but it does mean we need to load three extra JavaScript files:
+
+* the `system.js` module loader (circa 56KB, not gzipped)
+
+* the `jspm.browser.js` for providing configuration for our browser (circa 1KB, not gzipped)
+
+* the jspm.config.js for providing configuration for the system.js module loader (circa 6KB, not gzipped)
+
+All in all, webpack is the easiest of the approaches to configure, and provides a great deal of control,
+including chunking (whereby only the code that is needed for a page is loaded) and hot loading.
+
+
+===
+
+## 1. browserify-babelify
 
 This approach uses the [browserify](http://browserify.org/) with the [babelify transform](https://github.com/babel/babelify)
 and the [uglifyify transform](https://www.npmjs.com/package/uglifyify)
@@ -72,7 +100,7 @@ We get a `bundle.js` size of 3.2KB, and this approach requires relatively minima
     },
 
 
-## jspm-systemjs-babel
+## 2. jspm-systemjs-babel
 
 This approach uses the [jspm](http://jspm.io/) / [SystemJS](https://github.com/systemjs/systemjs) / [es6-module-loader](https://github.com/ModuleLoader/es6-module-loader) troika that's maintained by Guy Bedford.
 
@@ -134,7 +162,7 @@ We get a `bundle.js` size of 3.4KB, and although the jspm approach works well, i
 * the jspm.config.js for providing configuration for the system.js module loader (circa 6KB, not gzipped)
 
 
-## webpack-babel
+## 3. webpack-babel
 
 This approach uses webpack with babel and uglify.
 
@@ -252,6 +280,3 @@ We get a `bundle.js` size of 1.8KB, which is by far the smallest.
 Webpack also has easy to understand configuration, aided by the fact that it is
 specified using JavaScript rather than JSON, meaning that we've got more options for tweaking
 the configuration to our liking.
-
-All in all, webpack is the easiest of the approaches to configure, and provides a great deal of control,
-including chunking (whereby only the code that is needed for a page is loaded) and hot loading.
