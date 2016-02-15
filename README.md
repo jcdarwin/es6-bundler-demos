@@ -118,8 +118,6 @@ This demo demonstrates some of the major features of using JSPM to bundle React 
 
 	 npm install --save-dev jspm@beta
 
-	 ./node_modules/.bin/jspm init
-
 	 ./node_modules/.bin/jspm install
 
 ### Building
