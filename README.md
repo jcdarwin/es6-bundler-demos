@@ -5,7 +5,7 @@ ES6 modules such that they work in the browser.
 
 Our focus is on the different ways of bundling ES6 modules for use in the browser,
 rather than on build tools in general, and for this reason we eschew here tools
-such as WebPack, Gulp, Grunt etc.
+such as Gulp, Grunt etc.
 
 For our examples, we compile a very simple React application that loads another
 file (`Hello.js`) as an ES6 module.
@@ -19,27 +19,28 @@ JSX to regular JavaScript
 
 * produce a `bundle.js` file containing all of our custom modules
 
-* third party dependencies (such as React) should not be included in our application bundle,
-as we may want to include them from a CDN
+* third party dependencies (such as React) should not be included in our `bundle.js`,
+as we may want to include them instead from a CDN, or in a separate bundle.
 
 * We want a dev build (`npm run dev`) that doesn't uglify our code
 
 * we want a production build (`npm run prod`) that does uglify our code
 
-* we want all files (with the exception of third-party JavaScript, which may live on a CDN) that are
-to be served to be compiled into a `build` folder.
+* we want all files that are to be served to be compiled into a `build` folder
+(with the exception of third-party JavaScript which may live on a CDN) .
 
-All techniques listed below work with [Babel 6](http://jamesknelson.com/the-six-things-you-need-to-know-about-babel-6/): Babel 6 introduced a new plugin architecture which is great, but also broke the previous API. Coupled with this, the `browser.js` file was deprecated, meaning that we need to find another way to load ES6 modules in our browser.
+All techniques listed below work with [Babel 6](http://jamesknelson.com/the-six-things-you-need-to-know-about-babel-6/): Babel 6 introduced a new plugin architecture which is great, but also broke the previous API. Coupled with this, in Babel 6.2.0 the `browser.js` file was deprecated, meaning that we shouldn't rely on it to load ES6 modules directly into the browser, and should instead to find another way to load ES6 modules in our browser.
 
 ## Approaches
 
 The three approaches we'll be considering here are:
 
-1. browserify-babelify: browserify with the babelify and uglifyify transforms
+1. [browserify-babelify](#1-browserify-babelify): [browserify](http://browserify.org/) with the [babelify](https://github.com/babel/babelify)
+and [uglifyify](https://www.npmjs.com/package/uglifyify) transforms.
 
-2. jspm-systemjs-babel: jspm, systemJS and the es6-module-loader, making use of Babel and Rollup
+2. [jspm-systemjs-babel](#2-jspm-systemjs-babel): [jspm](http://jspm.io/) / [SystemJS](https://github.com/systemjs/systemjs) / [es6-module-loader](https://github.com/ModuleLoader/es6-module-loader)
 
-3. webpack-babel: webpack with the babel-loader and uglifyJS plugin.
+3. [webpack-babel](#3-webpack-babel): webpack with the [babel-loader](https://github.com/babel/babel-loader) and [uglifyJS plugin](https://webpack.github.io/docs/list-of-plugins.html#uglifyjsplugin).
 
 ## Overall conclusion
 
@@ -52,7 +53,7 @@ but it does mean we need to load three extra JavaScript files:
 
 * the jspm.config.js for providing configuration for the system.js module loader (circa 6KB, not gzipped)
 
-All in all, webpack is the easiest of the approaches to configure, and provides a great deal of control,
+All in all, webpack-babel is the easiest of the approaches to configure, and provides a great deal of control,
 including chunking (whereby only the code that is needed for a page is loaded) and hot loading.
 
 
@@ -60,13 +61,10 @@ including chunking (whereby only the code that is needed for a page is loaded) a
 
 ## 1. browserify-babelify
 
-This approach uses the [browserify](http://browserify.org/) with the [babelify transform](https://github.com/babel/babelify)
-and the [uglifyify transform](https://www.npmjs.com/package/uglifyify)
+This approach uses [browserify](http://browserify.org/) with the [babelify transform](https://github.com/babel/babelify)
+and the [uglifyify transform](https://www.npmjs.com/package/uglifyify).
 
-We use the [browserify-shim](https://github.com/thlorenz/browserify-shim) to ensure that we don't include our dependencies in our application bundle.
-
-Using the [uglifyify transform](https://www.npmjs.com/package/uglifyify) means we get the chance to minify third-party
-code as well as our own custom code.
+We also use the [browserify-shim](https://github.com/thlorenz/browserify-shim) to ensure that we don't include our third-party dependencies in our application bundle.
 
 ### Installation
 
@@ -90,7 +88,7 @@ Our actual build command, using the npm scripts block, is relatively straight-fo
 
 ### Conclusion
 
-We get a `bundle.js` size of 3.2KB, and this approach requires relatively minimal configuration: apart from the build command, we make use of the [browserify-shim](https://github.com/thlorenz/browserify-shim) in `package.json` to exclude React from our `bundle.js`:
+We get a `bundle.js` size of 3.2KB, and this approach requires relatively minimal configuration &#8212; apart from the build command, we make use of the [browserify-shim](https://github.com/thlorenz/browserify-shim) in `package.json` to exclude React from our `bundle.js`:
 
     "browserify": {
       "transform": [
